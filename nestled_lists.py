@@ -6,30 +6,29 @@ test2 = [1, [1, [2, 3]], [[4, [5, 3]], 5, 6], [7, 8, 9]]
 test3 = ['a', ['b', 'b'], [['c', ['b']], 'a']]
 
 
-def make_list(l, n_of_elements, new_list_chance, elements):
-    print(l)
-    print(n_of_elements)
-
-    if n_of_elements == 0:
-        print('First')
-        return l
-
-    rand = random.random()
-
-    new_list = make_list(l, n_of_elements-1, new_list_chance, elements)
-    print(new_list)
+def make_list(n_of_elements, new_list_chance, elements):
+    l = []
+    if n_of_elements <= 1:
+        return elements[random.randint(0, len(elements)-1)]
+    for _ in range(n_of_elements):
+        rand = random.random()
+        if rand < 0.75:
+            new_list = make_list(round(n_of_elements/2),
+                                 new_list_chance, elements)
+            l.append(new_list)
+        else:
+            random_char = elements[random.randint(0, len(elements)-1)]
+            l.append(random_char)
+    return l
 
 
 def make_aribtrary_list():
     strings = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    l = []
+
     n_of_elements = random.randint(0, 10)
     new_list_chance = 0.75
 
-    return make_list(l, n_of_elements, new_list_chance, strings)
-
-
-print(make_aribtrary_list())
+    return make_list(n_of_elements, new_list_chance, strings)
 
 
 def flatten(old_list, new_list):
@@ -45,4 +44,11 @@ def flatten(old_list, new_list):
             return new_list
 
 
-print(flatten(test3, []))
+# print(make_aribtrary_list())
+
+for i in range(100):
+    test_list = make_aribtrary_list()
+    if(i % 10 == 0):
+
+        print('Test list was: {} \n Flattened list became: {}'.format(
+            test_list, flatten(test_list, [])))
